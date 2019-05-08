@@ -1,0 +1,67 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "com.wsg.factoryoverhaul"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+    dexOptions {
+        preDexLibraries true
+        // dexInProcess requires much RAM, which is not available on all dev systems
+        dexInProcess false
+        jumboMode true
+        javaMaxHeapSize "2g"
+    }
+
+    packagingOptions {
+        exclude 'LICENSE.txt'
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+        exclude 'META-INF/DEPENDENCIES'
+        exclude 'META-INF/LICENSE'
+        exclude 'META-INF/NOTICE'
+        exclude '.readme'
+    }
+
+    sourceSets.main {
+        jni.srcDirs = []
+        jniLibs.srcDir "src/main/jniLibs"
+    }
+}
+
+dependencies {
+    configurations {
+        all*.exclude group: 'com.android.support', module: 'support-v13'
+    }
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.android.support:recyclerview-v7:28.0.0'
+
+    //UI Support
+    implementation 'com.afollestad.material-dialogs:core:0.9.5.0'
+    implementation 'com.afollestad.material-dialogs:commons:0.9.4.5'
+    implementation 'com.github.CymChad:BaseRecyclerViewAdapterHelper:2.9.40'
+    //tools
+    implementation 'com.blankj:utilcode:1.23.7'
+    implementation 'org.greenrobot:eventbus:3.1.1'
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation 'com.android.support:design:28.0.0'
+    implementation 'com.alivc.conan:AlivcConan:0.9.3'
+    implementation 'com.google.code.gson:gson:2.8.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.2.0'
+    implementation 'com.aliyun.video.android:upload:1.5.2'
+    implementation project(":AliyunSdk-RC")
+
+}

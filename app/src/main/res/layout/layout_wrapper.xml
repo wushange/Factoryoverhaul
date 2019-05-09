@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+    android:background="@android:color/holo_blue_bright"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/iv_focus"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignParentLeft="true"
+        android:layout_centerVertical="true"
+        android:src="@drawable/alivc_record_focus"
+        />
+    <LinearLayout
+        android:id="@+id/ll_seek_layout"
+        android:layout_toRightOf="@id/iv_focus"
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:gravity="center_horizontal"
+        android:layout_height="wrap_content">
+        <ImageView
+            android:src="@drawable/alivc_record_light_up"
+            android:layout_width="12dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="12dp" />
+
+        <com.wsg.factoryoverhaul.view.AlivcVerticalSeekBar
+            android:id="@+id/vertical_seekbar"
+            android:layout_width="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:src="@drawable/alivc_record_light_down"
+            android:layout_gravity="center_horizontal"
+            android:layout_width="12dp"
+            android:layout_height="12dp" />
+
+    </LinearLayout>
+</merge>

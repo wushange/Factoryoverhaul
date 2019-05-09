@@ -29,7 +29,7 @@ public class LoginActivity extends AppCompatActivity {
         btnStart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ActivityUtils.startActivity(MainActivity.class);
+                ActivityUtils.startActivity(AliyunVideoRecorder.class);
             }
         });
     }

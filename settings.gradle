@@ -1,1 +1,1 @@
-include ':app', ':AliyunSdk-RCE', ':AliyunSdk-RC'
+include ':app',   ':AliyunSdk-RC'

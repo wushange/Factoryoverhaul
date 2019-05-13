@@ -69,6 +69,9 @@ import java.io.File;
 import java.lang.reflect.Method;
 import java.util.List;
 
+import static com.wsg.factoryoverhaul.util.Contants.VIDEOPATH;
+import static com.wsg.factoryoverhaul.util.Contants.VIDEO_FILE_PATH;
+
 /**
  * 视频拍摄界面
  * 该界面进行视频录制, 选择相册资源等
@@ -108,14 +111,14 @@ public class AliyunVideoRecorder extends Activity implements View.OnClickListene
     private AliyunIRecorder mRecorder;
     private AliyunIClipManager mClipManager;
     private SurfaceView mSurfaceView;
-    private boolean isBeautyOn = true;
+    private boolean isBeautyOn = false;
     private boolean isSelected = false;
     private RecordTimelineView mRecordTimelineView;
     private ImageView mSwitchBeautyBtn, mSwitchCameraBtn, mSwitchLightBtn, mBackBtn, mRecordBtn, mDeleteBtn, mCompleteBtn, mGalleryBtn;
     private TextView mRecordTimeTxt;
     private FrameLayout mToolBar, mRecorderBar;
     private FlashType mFlashType = FlashType.OFF;
-    private CameraType mCameraType = CameraType.FRONT;
+    private CameraType mCameraType = CameraType.BACK;
     private ScaleGestureDetector scaleGestureDetector;
     private GestureDetector gestureDetector;
     private float mScaleFactor;
@@ -673,7 +676,7 @@ public class AliyunVideoRecorder extends Activity implements View.OnClickListene
 
         mResolutionMode = getIntent().getIntExtra(AliyunSnapVideoParam.VIDEO_RESOLUTION, AliyunSnapVideoParam.RESOLUTION_540P);
         mMinDuration = getIntent().getIntExtra(AliyunSnapVideoParam.MIN_DURATION, 2000);
-        mMaxDuration = getIntent().getIntExtra(AliyunSnapVideoParam.MAX_DURATION, 30000);
+        mMaxDuration = getIntent().getIntExtra(AliyunSnapVideoParam.MAX_DURATION, 1000 * 60);
         mRatioMode = getIntent().getIntExtra(AliyunSnapVideoParam.VIDEO_RATIO, AliyunSnapVideoParam.RATIO_MODE_3_4);
         mGop = getIntent().getIntExtra(AliyunSnapVideoParam.VIDEO_GOP, 5);
         mBitrate = getIntent().getIntExtra(AliyunSnapVideoParam.VIDEO_BITRATE, 0);
@@ -1013,14 +1016,11 @@ public class AliyunVideoRecorder extends Activity implements View.OnClickListene
         }
 
 
-        String videoPath = Environment.getExternalStorageDirectory() + File.separator + Environment.DIRECTORY_DCIM + File.separator + System.currentTimeMillis() + ".mp4";
-        File file = new File(Environment.getExternalStorageDirectory()
-                + File.separator
-                + Environment.DIRECTORY_DCIM);
+        File file = new File(VIDEOPATH);
         if (!file.exists()) {
             file.mkdirs();
         }
-        mRecorder.setOutputPath(videoPath);
+        mRecorder.setOutputPath(VIDEO_FILE_PATH);
         handleRecordStart();
         mRecorder.setRotation(getPictureRotation());
         isRecordError = false;

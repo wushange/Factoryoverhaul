@@ -1,58 +1,85 @@
 package com.wsg.factoryoverhaul;
 
-import android.support.v7.app.AppCompatActivity;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.SurfaceView;
+import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
+import android.widget.Toast;
 
-import com.aliyun.recorder.AliyunRecorderCreator;
-import com.aliyun.recorder.supply.AliyunIRecorder;
-import com.aliyun.svideo.sdk.external.struct.encoder.VideoCodecs;
+import com.aliyun.svideo.sdk.external.struct.common.CropKey;
 import com.aliyun.svideo.sdk.external.struct.recorder.CameraType;
-import com.aliyun.svideo.sdk.external.struct.recorder.MediaInfo;
+import com.aliyun.svideo.sdk.external.struct.snap.AliyunSnapVideoParam;
+import com.blankj.utilcode.util.ActivityUtils;
+import com.blankj.utilcode.util.FileUtils;
+import com.chad.library.adapter.base.BaseQuickAdapter;
+
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+import static com.wsg.factoryoverhaul.util.Contants.VIDEOPATH;
 
 public class MainActivity extends AppCompatActivity {
-    AliyunIRecorder mRecorder;
-    private SurfaceView glSurfaceview;
-    private VideoCodecs mVideoCodec = VideoCodecs.H264_HARDWARE;
+    private static final int REQUEST_RECORD = 2001;
+    VideoAdapter videoAdapter;
+    @BindView(R.id.rclview)
+    RecyclerView rclview;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        ButterKnife.bind(this);
 
-        glSurfaceview = findViewById(R.id.aliyun_preview);
-//        AliyunSnapVideoParam recordParam = new AliyunSnapVideoParam.Builder()
-//                .setResolutionMode(resolutionMode)
-//                .setRatioMode(ratioMode)
-//                .setRecordMode(AliyunSnapVideoParam.RECORD_MODE_AUTO)
-//                .setFilterList(effectDirs)
-//                .setBeautyLevel(80)
-//                .setBeautyStatus(true)
-//                .setCameraType(CameraType.FRONT)
-//                .setFlashType(FlashType.ON)
-//                .setNeedClip(true)
-//                .setMaxDuration(max)
-//                .setMinDuration(min)
-//                .setVideoQuality(videoQuality)
-//                .setGop(gop)
-//                .setVideoCodec(mVideoCodec)
-//                .setCropMode(VideoDisplayMode.FILL)
-//                .setSortMode(AliyunSnapVideoParam.SORT_MODE_VIDEO)
-//                .build();
-
-        mRecorder = AliyunRecorderCreator.getRecorderInstance(this);//参数context为当前页面的上下文
-        final MediaInfo info = new MediaInfo();
-        info.setVideoWidth(720);
-        info.setVideoHeight(720);
-        info.setVideoCodec(mVideoCodec);
-        info.setCrf(25);
-        mRecorder.setMediaInfo(info);
-        mRecorder.setDisplayView(glSurfaceview);
-        mRecorder.startPreview();
+        videoAdapter = new VideoAdapter(new ArrayList<File>());
+        rclview.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+        videoAdapter.bindToRecyclerView(rclview);
+        videoAdapter.setOnItemClickListener(new BaseQuickAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(BaseQuickAdapter adapter, View view, int position) {
+                Intent intent = new Intent(getBaseContext(), VideoActivity.class);
+                intent.putExtra("PATH", videoAdapter.getItem(position).getPath());
+                ActivityUtils.startActivity(intent);
+            }
+        });
+        getData();
+        AliyunSnapVideoParam a = new AliyunSnapVideoParam();
+        a.setCameraType(CameraType.BACK);
+        AliyunVideoRecorder.startRecordForResult(this, REQUEST_RECORD, a);
     }
 
+    private void getData() {
+        List<File> files = FileUtils.listFilesInDir(VIDEOPATH);
+        if (files != null && files.size() > 0) {
+            videoAdapter.setNewData(files);
+        }
+    }
+
+
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mRecorder.destroy();
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        if (requestCode == REQUEST_RECORD) {
+            if (resultCode == Activity.RESULT_OK && data != null) {
+                int type = data.getIntExtra(AliyunVideoRecorder.RESULT_TYPE, 0);
+                if (type == AliyunVideoRecorder.RESULT_TYPE_CROP) {
+                    String path = data.getStringExtra(CropKey.RESULT_KEY_CROP_PATH);
+                    Toast.makeText(this, "文件路径为 " + path + " 时长为 " + data.getLongExtra(CropKey.RESULT_KEY_DURATION, 0), Toast.LENGTH_SHORT).show();
+                } else if (type == AliyunVideoRecorder.RESULT_TYPE_RECORD) {
+                    Toast.makeText(this, "文件路径为 " + data.getStringExtra(AliyunVideoRecorder.OUTPUT_PATH),
+                            Toast.LENGTH_SHORT).show();
+                }
+                getData();
+            } else if (resultCode == Activity.RESULT_CANCELED) {
+                Toast.makeText(this, "用户取消录制", Toast.LENGTH_SHORT).show();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
     }
 }

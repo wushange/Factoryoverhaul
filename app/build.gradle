@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.wsg.factoryoverhaul"
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -32,6 +32,10 @@ android {
         exclude 'META-INF/LICENSE'
         exclude 'META-INF/NOTICE'
         exclude '.readme'
+    }
+    compileOptions {
+        sourceCompatibility 1.8
+        targetCompatibility 1.8
     }
 
     sourceSets.main {
@@ -62,6 +66,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.0'
     implementation 'com.squareup.okhttp3:okhttp:3.2.0'
     implementation 'com.aliyun.video.android:upload:1.5.2'
+    implementation 'com.wsg:titlebar:1.08'
+    implementation 'cn.jzvd:jiaozivideoplayer:7.0.3'
     implementation project(":AliyunSdk-RC")
 
 }

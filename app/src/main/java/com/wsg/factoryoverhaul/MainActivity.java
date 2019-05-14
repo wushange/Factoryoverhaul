@@ -16,6 +16,7 @@ import com.aliyun.svideo.sdk.external.struct.snap.AliyunSnapVideoParam;
 import com.blankj.utilcode.util.ActivityUtils;
 import com.blankj.utilcode.util.FileUtils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.wsg.factoryoverhaul.bean.User;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -52,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         getData();
         AliyunSnapVideoParam a = new AliyunSnapVideoParam();
         a.setCameraType(CameraType.BACK);
+        a.setMaxDuration(300 * 1000);
         AliyunVideoRecorder.startRecordForResult(this, REQUEST_RECORD, a);
     }
 

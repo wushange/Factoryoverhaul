@@ -59,6 +59,8 @@ import com.aliyun.svideo.sdk.external.struct.recorder.MediaInfo;
 import com.aliyun.svideo.sdk.external.struct.snap.AliyunSnapVideoParam;
 import com.qu.preview.callback.OnFrameCallBack;
 import com.qu.preview.callback.OnTextureIdCallBack;
+import com.wsg.factoryoverhaul.bean.User;
+import com.wsg.factoryoverhaul.manager.DataManager;
 import com.wsg.factoryoverhaul.util.FastClickUtil;
 import com.wsg.factoryoverhaul.util.PermissionUtils;
 import com.wsg.factoryoverhaul.view.OrientationDetector;
@@ -1020,7 +1022,14 @@ public class AliyunVideoRecorder extends Activity implements View.OnClickListene
         if (!file.exists()) {
             file.mkdirs();
         }
-        mRecorder.setOutputPath(VIDEO_FILE_PATH);
+
+        String fileName = VIDEOPATH + File.separator + System.currentTimeMillis() + ".mp4";
+        User user = DataManager.getInstance().getUser();
+        if (user != null) {
+            fileName = VIDEOPATH + File.separator + "uid_" + user.getUserId() + "_dcode_" + user.getCodeId() + "_" + System.currentTimeMillis() + ".mp4";
+        }
+
+        mRecorder.setOutputPath(fileName);
         handleRecordStart();
         mRecorder.setRotation(getPictureRotation());
         isRecordError = false;

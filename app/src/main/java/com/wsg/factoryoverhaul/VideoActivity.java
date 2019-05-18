@@ -14,7 +14,7 @@ import cn.jzvd.JZDataSource;
 import cn.jzvd.Jzvd;
 import cn.jzvd.JzvdStd;
 
-public class VideoActivity extends AppCompatActivity {
+public class VideoActivity extends AppCompatActivity  {
     String filePth = "";
 
     @Override
@@ -28,7 +28,7 @@ public class VideoActivity extends AppCompatActivity {
                 filePth = bundle.getString("PATH");
                 JzvdStd jzvdStd = (JzvdStd) findViewById(R.id.videoplayer);
                 JZDataSource jzDataSource = new JZDataSource(filePth, FileUtils.getFileName(filePth));
-                jzvdStd.setUp(jzDataSource, JzvdStd.SCREEN_NORMAL);
+                jzvdStd.setUp(jzDataSource, JzvdStd.SCREEN_FULLSCREEN);
             }
         }
 

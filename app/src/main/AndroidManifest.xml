@@ -33,7 +33,7 @@
         <activity
             android:name=".VideoActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="landscape" />
     </application>
 
 </manifest>

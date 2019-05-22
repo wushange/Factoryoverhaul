@@ -7,6 +7,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.blankj.utilcode.util.FileUtils;
 import com.wsg.factoryoverhaul.util.Contants;
+import com.wsg.factoryoverhaul.view.JzvdStdSpeed;
 
 import java.io.File;
 
@@ -26,13 +27,15 @@ public class VideoActivity extends AppCompatActivity  {
             Bundle bundle = intent.getExtras();
             if (bundle != null) {
                 filePth = bundle.getString("PATH");
-                JzvdStd jzvdStd = (JzvdStd) findViewById(R.id.videoplayer);
+                JzvdStdSpeed jzvdStd = findViewById(R.id.videoplayer);
                 JZDataSource jzDataSource = new JZDataSource(filePth, FileUtils.getFileName(filePth));
-                jzvdStd.setUp(jzDataSource, JzvdStd.SCREEN_FULLSCREEN);
+                jzvdStd.setUp(jzDataSource,JzvdStd.SCREEN_FULLSCREEN);
+//                JzvdStd.startFullscreenDirectly(this, JzvdStd.class,jzDataSource);
             }
         }
 
     }
+
 
     @Override
     public void onBackPressed() {

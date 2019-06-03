@@ -5,6 +5,7 @@ import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.Toast;
 
 import com.blankj.utilcode.util.FileUtils;
@@ -40,6 +41,13 @@ public class VideoActivity extends AppCompatActivity  {
                 mPlayerStandard.setUp(filePth,JZVideoPlayer.SCREEN_WINDOW_FULLSCREEN, FileUtils.getFileName(filePth));
             }
         }
+        mPlayerStandard.backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        mPlayerStandard.fullscreenButton.setVisibility(View.GONE);
 
     }
 
